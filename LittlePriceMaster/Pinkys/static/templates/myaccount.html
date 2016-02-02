@@ -83,7 +83,7 @@
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
    
 
-        <form action="/myaccount/" method="post">{% csrf_token %}
+        <form action="/accounts/" method="post">{% csrf_token %}
           <ul>
             <ul>Nombre: {{ form.nombre_usuario}} </ul></br>
             <ul>Correo: {{ form.correo}}</ul>
