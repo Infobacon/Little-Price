@@ -25,7 +25,7 @@ urlpatterns = [
     url(r'home/$', 'littleprice.views.index_view'),
     url(r'supermercados_detalle/(?P<id_supermercado>\d+)$', 'littleprice.views.supermercados_detalle_view'),
     url(r'^admin/', include(admin.site.urls)),     
-    url(r'^estrellitas/$','littleprice.views.estrellitas'),
+    url(r'^estrellitas/(?P<id_producto_precio>\d+)$','littleprice.views.estrellitas'),
     url(r'^supermercados/$', 'littleprice.views.supermercados_view'),
     url(r'^perfil/$', 'littleprice.views.perfil'),
     url(r'^accounts/', include('registration.urls')),
