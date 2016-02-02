@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Little Price</title>
+
+<script type="text/javascript" src="/static/js/jscharts.js"></script>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Custom CSS -->
+    <link href="/static/css/custom.css" rel="stylesheet">
+
+     <!-- FontAwesome -->
+
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+    
+    <script src="/static/js/ie8-responsive-file-warning.js"></script>
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+   
+  </head>
+  <body>
+ <!-- Static navbar -->
+   <nav class="navbar navbar-default navbar-static-top">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar1">
+                <span class="sr-only">Menu</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="/home/"><img src="/media/imagenes/logos/logocinealtiro.jpg"></a>     
+        
+            </div>
+            {% if user.is_authenticated %}
+              <div id = "navbar1" class="navbar-collapse collapse">
+                  <!-- IZQUERDA -->
+                  <ul class="nav navbar-nav">
+                  <li><a href="/supermercados"><i>Supermercados</i></a></li>
+                  <li><a href="/lista_productos"><i>Productos</i></a></li>                  
+                  <li><a href="/ingresar_producto"><i>Ingresar producto</i></a></li>
+                  <li><a href="/mis_productos"><i>Mis productos</i></a></li>
+                  <li><a href="/grafico"><i>Graficos</i></a></li>
+                      <li class="dropdown">
+                  </ul>
+                  <!-- DERECHA -->
+                  <ul class="nav navbar-nav navbar-right">
+                  <li>  <a href="/perfil"><strong><i>Bienvenido {{user.username|capfirst}}</strong> </i></a></li>        
+                  <li>  <a href="/accounts/logout"><i>Salir</i></a></li>
+                  
+                </ul>
+              </div><!--/.nav-collapse -->
+
+            
+            {% else %}
+            <div id = "navbar1" class="navbar-collapse collapse">
+              <!-- IZQUERDA -->
+              <ul class="nav navbar-nav">
+                  <li><a href="/supermercados"><i>Supermercados</i></a></li>
+                  <li><a href="/lista_productos"><i>Productos</i></a></li> 
+                  <li><a href="/grafico"><i>Graficos</i></a></li>     
+                  <li class="dropdown">
+              </ul>
+              <!-- DERECHA -->
+              <ul class="nav navbar-nav navbar-right">      
+                  <li><a href="/accounts/register"><i>Inscríbete</i></a></li>
+                  <li><a href="/accounts/login"><i>Ingresar</i></a></li>
+              </ul>
+            </div><!--/.nav-collapse -->
+            {% endif %}
+          </div>
+      </nav>
+{% load staticfiles %}
+
+{%block head %}
+{% endblock %}
+
+{% block content %}
+{%for producto in dprod%}
+  {%for precio in dprecio%}
+    {%ifequal precio.id_producto.id_producto  producto.id_producto%}
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    
+          <h2 class="sub-header">{{ producto.nombre }} - {{ producto.marca }}</h2>
+          
+          <div id="grafico_producto">Cargando gráfico</div>
+         <script type="text/javascript">
+  
+              var myChart = new JSChart('grafico_producto', 'line');
+              myChart.setDataArray([[1, 400],[2, 400],[3, 389],[4, 389],[5, 389],[6, 750],[7, 750],[8, 750],[9, 750],[10, 750],[11, 760],[12, 765]], 'blue');
+              myChart.setDataArray([[1, 350],[2, 360],[3, 320],[4, 380],[5, 410],[6, 400],[7, 400],[8, 410],[9, 410],[10, 410],[11, 425],[12, 425]], 'green');
+              myChart.setDataArray([[1, 550],[2, 550],[3, 550],[4, 580],[5, 540],[6, 820],[7, 820],[8, 820],[9, 820],[10, 820],[11, 820],[12, 850]], 'gray');
+              myChart.setSize(700, 300);
+              myChart.setAxisNameX('Mes');
+              myChart.setAxisNameY('Precio');
+              myChart.setTitle('Precio del  en el tiempo');
+              myChart.setLegendShow(true);
+              myChart.setLegendPosition(630, 80);
+              myChart.setLegendForLine('blue', 'Lider');
+              myChart.setLegendForLine('green', 'Ekonno');
+              myChart.setLegendForLine('gray', 'SanCuico');
+              myChart.setAxisValuesNumberY(5);
+              myChart.setAxisValuesNumberX(6);
+              myChart.setShowXValues(false);
+              myChart.setLabelX([2,'Febrero']);
+              myChart.setLabelX([4,'Abril']);
+              myChart.setLabelX([6,'Junio']);
+              myChart.setLabelX([8,'Agosto']);
+              myChart.setLabelX([10,'Octubre']);
+              myChart.setLabelX([12,'Diciembre']);
+              myChart.setTitleColor('#454545');
+              myChart.setAxisValuesColor('#454545');
+              myChart.setLineColor('#A4D314', 'green');
+              myChart.setLineColor('#BBBBBB', 'gray');
+              myChart.setTooltip([1,' ']);
+              myChart.setTooltip([2,' ']);
+              myChart.setTooltip([3,' ']);
+              myChart.setTooltip([4,' ']);
+              myChart.setTooltip([5,' ']);
+              myChart.setTooltip([6,' ']);
+              myChart.setTooltip([7,' ']);
+              myChart.setTooltip([8,' ']);
+              myChart.setTooltip([9,' ']);
+              myChart.setTooltip([10,' ']);
+              myChart.setTooltip([11,' ']);
+              myChart.setTooltip([12,' ']);
+              myChart.setFlagColor('#9D16FC');
+              myChart.setFlagRadius(4);
+              myChart.setAxisPaddingRight(100);
+              myChart.draw();
+              
+            </script>
+
+        </div>
+    {%endifequal%}
+    {%endfor%}
+    {%endfor%}
+
+   
+
+{%  endblock %}
+ <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+     {{ form.media }}
+   <!--  IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/static/jsie10-viewport-bug-workaround.js"></script>
+    
+ 
+
+  </body>
+</html>

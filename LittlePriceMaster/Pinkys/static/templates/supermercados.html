@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Little Price</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Custom CSS -->
+    <link href="/static/css/custom.css" rel="stylesheet">
+
+     <!-- FontAwesome -->
+
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+    
+    <script src="/static/js/ie8-responsive-file-warning.js"></script>
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+   
+  </head>
+  <body>
+ <!-- Static navbar -->
+   <nav class="navbar navbar-default navbar-static-top">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar1">
+                <span class="sr-only">Menu</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="/home/"><img src="/media/imagenes/logos/logocinealtiro.jpg"></a>     
+        
+            </div>
+            {% if user.is_authenticated %}
+              <div id = "navbar1" class="navbar-collapse collapse">
+                  <!-- IZQUERDA -->
+                  <ul class="nav navbar-nav">
+                  <li><a href="/supermercados"><i>Supermercados</i></a></li>
+                  <li><a href="/lista_productos"><i>Productos</i></a></li>                  
+                  <li><a href="/ingresar_producto"><i>Ingresar producto</i></a></li>
+                  <li><a href="/mis_productos"><i>Mis productos</i></a></li>
+                 <li><a href="/grafico"><i>Graficos</i></a></li>
+                      <li class="dropdown">
+                  </ul>
+                  <!-- DERECHA -->
+                  <ul class="nav navbar-nav navbar-right">
+                  <li>  <a href="/perfil"><strong><i>Bienvenido {{user.username|capfirst}}</strong> </i></a></li>        
+                  <li>  <a href="/accounts/logout"><i>Salir</i></a></li>
+                  
+                </ul>
+              </div><!--/.nav-collapse -->
+
+            
+            {% else %}
+            <div id = "navbar1" class="navbar-collapse collapse">
+              <!-- IZQUERDA -->
+              <ul class="nav navbar-nav">
+                  <li><a href="/supermercados"><i>Supermercados</i></a></li>
+                  <li><a href="/lista_productos"><i>Productos</i></a></li> 
+                  <li><a href="/grafico"><i>Graficos</i></a></li>     
+                  <li class="dropdown">
+              </ul>
+              <!-- DERECHA -->
+              <ul class="nav navbar-nav navbar-right">      
+                  <li><a href="/accounts/register"><i>Inscríbete</i></a></li>
+                  <li><a href="/accounts/login"><i>Ingresar</i></a></li>
+              </ul>
+            </div><!--/.nav-collapse -->
+            {% endif %}
+          </div>
+      </nav>
+   <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+       
+    
+<h3 class="sub-header">Supermercados en tu comuna</h3>
+        
+		<div class="row placeholders">
+
+ 			{% for supermercado in dsuper %}
+
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <a  href="/supermercados_detalle/{{supermercado.id_supermercado}}"><img class="group list-group-image" src="{{supermercado.imagen}}"  width="200" height="200"/><a>
+              <h3>{{ supermercado.nombre }}</h3>
+              <span class="text-muted">{{ supermercado.direccion }}/10</span>
+
+            </div>
+           
+            {% endfor %}
+          </div>
+
+<div id="map">    
+        
+            <script>
+              function initMap(){
+                var mapDiv = document.getElementById('map');
+                var map = new google.maps.Map(mapDiv, {
+                  center: { lat: {{supermercado.latitud}}, lng: {{supermercado.longitud}}},
+                  zoom: 8
+                });
+              }
+            </script>
+
+            <script src="https://maps.googleapis.com/maps/api/js?callback=initMap" async defer></script>
+</div>
+
+</div>
+ <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+     {{ form.media }}
+   <!--  IE10 viewport hack for Surface/desktop Windows 8 bug -->
+ 
+
+  </body>
+</html>

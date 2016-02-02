@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+{% load disqus_tags %}
+<html lang="es">
+  <head>
+      <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico"><script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="http://code.highcharts.com/highcharts.js" type="text/javascript"></script>
+    <script src="/highcharts.js" type="text/javascript"></script>   
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    {% load chartit %}
+    {{ cht|load_charts:"container" }}
+    <title>Little Price</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Custom CSS -->
+    <link href="/static/css/custom.css" rel="stylesheet">
+
+     <!-- FontAwesome -->
+
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head>
+
+  <body>
+
+   <!-- Static navbar -->
+   <nav class="navbar navbar-default navbar-static-top">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar1">
+                <span class="sr-only">Menu</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="/home/"><img src="/media/imagenes/logos/logocinealtiro.jpg"></a>     
+        
+            </div>
+            {% if user.is_authenticated %}
+              <div id = "navbar1" class="navbar-collapse collapse">
+                  <!-- IZQUERDA -->
+                  <ul class="nav navbar-nav">
+                  <li><a href="/supermercados"><i>Supermercados</i></a></li>
+                  <li><a href="/lista_productos"><i>Productos</i></a></li>                  
+                  <li><a href="/ingresar_producto"><i>Ingresar producto</i></a></li>
+                  <li><a href="/mis_productos"><i>Mis productos</i></a></li>
+                  <li><a href="/grafico"><i>Graficos</i></a></li>
+                      <li class="dropdown">
+                  </ul>
+                  <!-- DERECHA -->
+                  <ul class="nav navbar-nav navbar-right">
+                  <li>  <a href="/perfil"><strong><i>Bienvenido {{user.username|capfirst}}</strong> </i></a></li>        
+                  <li>  <a href="/accounts/logout"><i>Salir</i></a></li>
+                  
+                </ul>
+              </div><!--/.nav-collapse -->
+
+            
+            {% else %}
+            <div id = "navbar1" class="navbar-collapse collapse">
+              <!-- IZQUERDA -->
+              <ul class="nav navbar-nav">
+                  <li><a href="/supermercados"><i>Supermercados</i></a></li>
+                  <li><a href="/lista_productos"><i>Productos</i></a></li>    
+                  <li><a href="/grafico"><i>Graficos</i></a></li>  
+                  <li class="dropdown">
+              </ul>
+              <!-- DERECHA -->
+              <ul class="nav navbar-nav navbar-right">      
+                  <li><a href="/accounts/register"><i>Inscríbete</i></a></li>
+                  <li><a href="/accounts/login"><i>Ingresar</i></a></li>
+              </ul>
+            </div><!--/.nav-collapse -->
+            {% endif %}
+          </div>
+      </nav>
+
+      <div class = "container">
+          <div class = "page-header">
+            <h1> {{dprod.nombre}} </h1>
+          </div>
+         
+        <div class= "row">
+            <div class = "col-md-3">
+                <div class = "thumbnail">
+                  <img src ="{{dprod.imagen}}">
+                </div>
+                
+            </div> 
+
+          <div class = "col-md-1">
+          </div>
+          
+           
+        </div> <!--ENDROW --> 
+
+
+        <div class = "row">
+          <div class = "col-md-3">
+
+            <div class ="panel panel-default">
+                            <div class = "panel-heading">                    
+                                <h4 class = "panel-tittle"> Detalles</h4>
+                            </div> 
+
+                 
+                          <table class = "table table-bordered table-striped">
+
+                              <tbody>
+                                <tr>
+                                  <td><strong>Marca:</strong>{{dprod.marca}}</td>
+                                </tr>
+                                <tr>
+                                  <td><strong>Descripcion:</strong>{{dprod.descripcion}}</td>
+                                </tr>
+                                <tr>
+                                  <td><strong>Cantidad:</strong>{{dprod.cantidad}}</td>
+                                </tr>                             
+                              </tbody>
+                          </table>
+              </div>
+          </div>
+
+          <div class = "col-md-1">
+          </div>
+          <div class = "col-md-8">
+
+              
+                  <div class ="panel panel-default">
+                          <div class = "panel-heading">                    
+                              <h4 class = "panel-tittle"> Precio</h4>
+                          </div>  
+                          {% for precios in dprecio %}
+                          <div class = "panel-body">
+                              <div class="rating rating2">        
+                              {% if user.is_authenticated %}
+                              <p style="font-size:80%">Califica el precio: </p>
+                              <form action="/estrellitas/{{item.id_producto_precio}}" method="post">{% csrf_token %}
+                               
+                                  <a style="font-size:80%">Nota: {{ form.valoracion}} </a>
+                                <input type="submit" name="guardar" value="Guardar">
+                              </form>      
+                              <a style="font-size:80%">Calificación de los usuarios: </a>
+                              {% ifequal nota 0 %} 
+                                <a style="font-size:110%" class="rating" >Sin calificaciones</a> 
+                              {% endifequal %} 
+                              {% ifequal nota 1 %} 
+                                <a style="font-size:110%" class="rating" >★</a> 
+                              {% endifequal %}  
+                              {% ifequal nota 2 %} 
+                                <a style="font-size:110%" class="rating" >★</a>
+                                <a style="font-size:110%" class="rating" >★</a>  
+                              {% endifequal %}
+                              {% ifequal nota 3 %} 
+                                <a style="font-size:110%" class="rating" >★</a>
+                                <a style="font-size:110%" class="rating" >★</a>          
+                                <a style="font-size:110%" class="rating" >★</a>  
+                              {% endifequal %}
+                              {% ifequal nota 4 %} 
+                                <a style="font-size:110%" class="rating" >★</a>
+                                <a style="font-size:110%" class="rating" >★</a>          
+                                <a style="font-size:110%" class="rating" >★</a>                    
+                                <a style="font-size:110%" class="rating" >★</a> 
+                              {% endifequal %}     
+                              {% ifequal nota 5 %} 
+                                <a style="font-size:110%" class="rating" >★</a>
+                                <a style="font-size:110%" class="rating" >★</a>          
+                                <a style="font-size:110%" class="rating" >★</a>          
+                                <a style="font-size:110%" class="rating" >★</a>          
+                                <a style="font-size:110%" class="rating" >★</a>  
+                              {% endifequal %}     
+                              {% else %}
+                              <a style="font-size:80%">Calificación de los usuarios: </a>
+                              {% ifequal nota 1 %} 
+                                <a style="font-size:110%" class="rating" >★</a> 
+                              {% endifequal %}  
+                              {% ifequal nota 2 %} 
+                                <a style="font-size:110%" class="rating" >★</a>
+                                <a style="font-size:110%" class="rating" >★</a>  
+                              {% endifequal %}
+                              {% ifequal nota 3 %} 
+                                <a style="font-size:110%" class="rating" >★</a>
+                                <a style="font-size:110%" class="rating" >★</a>          
+                                <a style="font-size:110%" class="rating" >★</a>  
+                              {% endifequal %}
+                              {% ifequal nota 4 %} 
+                                <a style="font-size:110%" class="rating" >★</a>
+                                <a style="font-size:110%" class="rating" >★</a>          
+                                <a style="font-size:110%" class="rating" >★</a>                    
+                                <a style="font-size:110%" class="rating" >★</a> 
+                              {% endifequal %}     
+                              {% ifequal nota 5 %} 
+                                <a style="font-size:110%" class="rating" >★</a>
+                                <a style="font-size:110%" class="rating" >★</a>          
+                                <a style="font-size:110%" class="rating" >★</a>          
+                                <a style="font-size:110%" class="rating" >★</a>          
+                                <a style="font-size:110%" class="rating" >★</a>  
+                              {% endifequal %}          
+                              {% endif %}
+                              </div>
+              
+                              <p>Precio: ${{precios.precio}} </p>
+                              <p>Fecha: {{precios.fecha}} </p>
+                              <p>Supermercado: {{precios.id_supermercado}}</p>
+                          </div>
+                      {%endfor%}
+                  </div>
+          </div>
+
+        
+        </div> <!-- END ROW -->
+
+    </div> <!-- END CONTAINER -->
+
+  
+
+
+   <div class = "container">
+    <h3>¿Donde comprar ?</h3>           
+    <hr>
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        
+        
+        <div class="panel panel-success">
+              <div class="panel-heading" role = "tab">
+                <h4 class="panel-title">
+                  <a href="#collpaseone" data-toggle="collapse" data-parent="#accordion">
+                  <strong>Supermercados</strong></a>
+                </h4>
+              </div>
+
+              <div id="collpaseone" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <div class = "row">
+                        <div class = "col-md-3">
+                           <p><strong><i>Nombre</i></strong></p>
+                        </div>
+
+                        <div class ="col-md-2">
+                           <p><strong><i>Direccion</i></strong></p>
+                        </div>
+                          <div class ="col-md-2">
+                           <p><strong><i>Link</i></strong></p>
+                        </div>
+
+                    </div>
+
+
+                  {%for item in dprecio%}
+                      <div class = "row">
+                    {%ifequal item.id_producto.id_producto dprod.id_producto%}
+                      {%for sup in dsuper%}
+                        {%ifequal item.id_supermercado.id_supermercado sup.id_supermercado %}
+                          <div class = "col-md-3">
+                             <p>{{sup.nombre}}</p>
+                          </div>
+
+                          <div class ="col-md-2">
+                                  <p>{{sup.direccion}}</p>
+                          </div>
+                          <div class ="col-md-2">
+                                  <a href="/supermercados/">IR</a>
+                          </div>
+
+                        {%endifequal%}
+                        {%endfor%}
+                       
+                    {%endifequal%}
+                  </div>
+                  {%endfor%}
+
+                </div>
+              </div>
+        </div>
+
+
+
+
+
+    
+    </div> <!-- END PANEL GRUOP -->
+    </div> <!-- END CONTAINER -->
+
+   <div class = "container">
+    <div class="col-md-12">
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        
+        
+        <div class="panel panel-success">
+              <div class="panel-heading" role = "tab">
+                <h4 class="panel-title">
+                  <a href="#collpaseone" data-toggle="collapse" data-parent="#accordion">
+                  <strong>Histograma</strong></a>
+                </h4>
+              </div>
+
+              <div id='container'> Chart will be rendered here </div>
+          </div>
+    </div>
+    </div>
+    </div>
+
+
+
+
+
+    
+    </div> <!-- END PANEL GRUOP -->
+    <hr>
+  <div class="container">  
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES * * */
+        var extra={{dprod.id_producto}};
+        var disqus_url='http://localhost:8000/pelicula/+extra'
+        var disqus_identifier ={{dprod.id_producto}};
+        var disqus_title='test';
+        var disqus_developer = 1;
+        var disqus_shortname = 'cinealtiro';
+        
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div> 
+
+      <!-- PIE DE PAGINA  -->
+
+      <div class ="container">
+        <footer>
+
+            <div class  ="navbar-text pull-left">
+        
+
+                  <p><strong><i>Little Price ® 2016 </i><strong> </p>
+                   <a href="#"><strong><i>Acerca de Nosotros</i></strong> </a>
+            </div>
+
+
+            <div class ="navbar-text pull-right">
+                  <p><i>Síguenos en las redes sociales</i></p>
+                  <a href="#"><i class="fa fa-facebook-square fa-4x"></i></a>
+                  <a href="#"><i class="fa fa-twitter-square fa-4x"></i></a>
+                  <a href="#"><i class="fa fa-google-plus-square fa-4x"></i></a>
+                  <a href="#"><i class="fa fa-instagram fa-4x"></i></a>
+            </div>    
+        </footer>
+      </div>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+
+
+  </body>
+</html>
