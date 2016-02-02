@@ -20,7 +20,7 @@ def index_view(request):
 	return render(request,"index.html",{'dprod':dato,'dsuper':supers})
 
 def supnames(month_num):
-    names ={0: 'Tottus', 1: 'Lider', 2: 'Ekono'}
+    names ={0: 'Tottus', 1: 'Ekono', 2: 'Lider'}
     return names[month_num]
 def canasta_basica_view(request,id_producto):
 	#listo
