@@ -22,6 +22,7 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
+    url(r'/$', 'littleprice.views.index_view'),
     url(r'home/$', 'littleprice.views.index_view'),
     url(r'supermercados_detalle/(?P<id_supermercado>\d+)$', 'littleprice.views.supermercados_detalle_view'),
     url(r'^admin/', include(admin.site.urls)),     
